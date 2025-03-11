@@ -97,7 +97,7 @@ namespace Uppg_databaser
                     if (fname == "" || lname == "" || city == "") 
                     {
                         Console.WriteLine("Ogiltig inmatning. Alla fälten måste fyllas i.");
-                        loopselec = false;
+                        loopselec = true;
                     }
                     else 
                     {
@@ -107,27 +107,32 @@ namespace Uppg_databaser
                         Console.WriteLine("Om ja, tryck 1. Annars skickas du tillbaka till huvudmenyn");
                         int savechoice = 0;
                         bool trysave = int.TryParse(Console.ReadLine(), out savechoice);
-                        if (savechoice == 1) {loopselec = true;}
-                        else { loopselec = false; }
+                        if (savechoice == 1) 
+                        {
+                            //Spara till newstudent
+                            //Lägg till i databas och spara ändringar
+                            newstudent.FirstName = fname;
+                            newstudent.LastName = lname;
+                            newstudent.City = city;
+                            dbCntxt.Add(newstudent);
+                            dbCntxt.SaveChanges();
+                            loopselec = true;
+                        }
+                        else { loopselec = true; }
                     }
-                    loopnumber++;
-                    //Kolla loopnumber, och om det är 3 så säg att användaren skickas tillbaka till menyn
-
+                    loopnumber++;                    
                 } while (loopselec == false || loopnumber>4);
-
-                //Spara till newstudent
-                //Lägg till i databas och spara ändringar
-                newstudent.FirstName = fname;
-                newstudent.LastName = lname;
-                newstudent.City = city;
-                dbCntxt.Add(newstudent);
-                dbCntxt.SaveChanges();
+                //Kolla loopnumber, och om det är 3 så säg att användaren skickas tillbaka till menyn
+                if (loopnumber == 3)
+                {
+                    Console.WriteLine("Du har fått tre försök och skickas nu tillbaka till menyn.\n");
+                }
             }
             catch 
             {
                 Console.WriteLine("Något gick fel. Du skickas nu tillbaka till huvudmenyn.");
             }
-                ReturnToMenu();
+            ReturnToMenu();
         }
         internal void ModifyStudent()
         {
@@ -138,9 +143,9 @@ namespace Uppg_databaser
         {
             if (dbCntxt != null)
             {
-                foreach (var s in dbCntxt)
+                foreach (var s in dbCntxt.Students)
                 {
-                    Console.WriteLine($"{s.Firstname} {s.Lastname}, {s.City}.");
+                    Console.WriteLine($"{s.FirstName} {s.LastName}, {s.City}.");
                 }
             }
             else 
