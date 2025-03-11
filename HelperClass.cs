@@ -92,15 +92,24 @@ namespace Uppg_databaser
                     lname = Console.ReadLine() ?? "";
                     Console.WriteLine("Ange stad:");
                     city = Console.ReadLine() ?? "";
+                    loopnumber++;
 
                     //Kolla om lokala variabler är null, loopa isf tillbaka
                     if (fname == "" || lname == "" || city == "") 
                     {
+                        Console.Clear();
                         Console.WriteLine("Ogiltig inmatning. Alla fälten måste fyllas i.");
-                        loopselec = true;
+                        if (loopnumber == 3)
+                        {
+                            Console.WriteLine("Du har fått tre försök och skickas nu tillbaka till menyn.\n");
+                            loopselec = true;
+                            
+                        }
+                        else { loopselec = false; }
                     }
                     else 
                     {
+                        Console.Clear();
                         //Kolla om anv vill spara dem till en ny student, om nej, loopa tillbaka
                         Console.WriteLine("Vill du spara följande information till din nya student?");
                         Console.WriteLine($"{fname} {lname}, {city}.");
@@ -119,14 +128,11 @@ namespace Uppg_databaser
                             loopselec = true;
                         }
                         else { loopselec = true; }
-                    }
-                    loopnumber++;                    
-                } while (loopselec == false || loopnumber>4);
+                    }   
+                    
+                } while (loopselec == false || loopnumber>3);
                 //Kolla loopnumber, och om det är 3 så säg att användaren skickas tillbaka till menyn
-                if (loopnumber == 3)
-                {
-                    Console.WriteLine("Du har fått tre försök och skickas nu tillbaka till menyn.\n");
-                }
+                
             }
             catch 
             {
@@ -136,12 +142,14 @@ namespace Uppg_databaser
         }
         internal void ModifyStudent()
         {
+            int stdntid = StudentSelector();
+
 
             ReturnToMenu();
         }
         internal void PrintAllStudent()
         {
-            if (dbCntxt != null)
+            if (dbCntxt.Students != null)
             {
                 foreach (var s in dbCntxt.Students)
                 {
@@ -162,10 +170,25 @@ namespace Uppg_databaser
         internal int StudentSelector()
         {
             int studentchoice = 0;
-
-            //Skriv ut alla i foreach med ett lokalt nummer i
-            //Använd i som studentid för att välja student som ska ändras eller tas bort
-
+            bool tryselect = false;
+            //Skriv ut hela listan för att visa vad som finns i den
+            if (dbCntxt.Students != null)
+            {
+                foreach (var s in dbCntxt.Students)
+                {
+                    Console.WriteLine($"Id {s.StudentId}: {s.FirstName} {s.LastName}, {s.City}.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Det finns inga studenter i databasen.");
+                ReturnToMenu();
+            }
+            Console.WriteLine("Ange id på personen du vill ta bort");
+            do
+            {
+                tryselect = int.TryParse(Console.ReadLine(), out studentchoice);
+            } while (tryselect == false);
             return studentchoice;
         }
         internal void ReturnToMenu() 
