@@ -231,14 +231,26 @@ namespace Uppg_databaser
         internal void DeleteStudent()
         {
             int stdntid = StudentSelector();
-
+            int deletechoice = 0;
+            bool parsedelete = false;
             try
             {
-                Student modstudent = dbCntxt.Students.Single(s => s.StudentId == stdntid);
+                Student delstudent = dbCntxt.Students.Single(s => s.StudentId == stdntid);
+                
 
                 Console.Clear();
-                Console.WriteLine("Vald student innan ändringen:");
-                Console.WriteLine($"{modstudent.FirstName} {modstudent.LastName}, {modstudent.City}\n");
+                Console.WriteLine("Vald student innan radering:");
+                Console.WriteLine($"{delstudent.FirstName} {delstudent.LastName}, {delstudent.City}\n");
+                Console.WriteLine("Vill du verkligen radera denna information?\nOm ja, tryck 1. Annars skickas du tillbaka till menyn.");
+                do
+                {
+                    parsedelete = int.TryParse(Console.ReadLine(), out deletechoice);
+                    if (deletechoice == 1)
+                    {
+                        dbCntxt.Students.Remove(delstudent);
+                        Console.WriteLine("Post raderad");
+                    }
+                } while (parsedelete == false);
             }
             catch 
             {
@@ -246,6 +258,8 @@ namespace Uppg_databaser
             }
             ReturnToMenu();
         }
+
+        //*************Ha en metod för studentinfocollector???****************************
         internal int StudentSelector()
         {
             int studentchoice = 0;
