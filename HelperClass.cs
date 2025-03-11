@@ -17,6 +17,7 @@ namespace Uppg_databaser
         //**************************************************************************************************
         internal void PrintMenu() 
         {
+            Console.Clear();
             Console.WriteLine("MENY:\n");
             Console.WriteLine("1. Lägg till en student");
             Console.WriteLine("2. Ändra en student");
@@ -74,8 +75,59 @@ namespace Uppg_databaser
         }
         internal void AddStudent()
         {
+            var newstudent = new Student();
+            bool loopselec = true;
+            int loopnumber = 0;
+            string fname;
+            string lname;
+            string city;
+            try
+            {
+                do
+                {
+                    //Ta emot lokala variabler
+                    Console.WriteLine("Ange förnamn:");
+                    fname = Console.ReadLine() ?? "";
+                    Console.WriteLine("Ange efternamn:");
+                    lname = Console.ReadLine() ?? "";
+                    Console.WriteLine("Ange stad:");
+                    city = Console.ReadLine() ?? "";
 
-            ReturnToMenu();
+                    //Kolla om lokala variabler är null, loopa isf tillbaka
+                    if (fname == "" || lname == "" || city == "") 
+                    {
+                        Console.WriteLine("Ogiltig inmatning. Alla fälten måste fyllas i.");
+                        loopselec = false;
+                    }
+                    else 
+                    {
+                        //Kolla om anv vill spara dem till en ny student, om nej, loopa tillbaka
+                        Console.WriteLine("Vill du spara följande information till din nya student?");
+                        Console.WriteLine($"{fname} {lname}, {city}.");
+                        Console.WriteLine("Om ja, tryck 1. Annars skickas du tillbaka till huvudmenyn");
+                        int savechoice = 0;
+                        bool trysave = int.TryParse(Console.ReadLine(), out savechoice);
+                        if (savechoice == 1) {loopselec = true;}
+                        else { loopselec = false; }
+                    }
+                    loopnumber++;
+                    //Kolla loopnumber, och om det är 3 så säg att användaren skickas tillbaka till menyn
+
+                } while (loopselec == false || loopnumber>4);
+
+                //Spara till newstudent
+                //Lägg till i databas och spara ändringar
+                newstudent.FirstName = fname;
+                newstudent.LastName = lname;
+                newstudent.City = city;
+                dbCntxt.Add(newstudent);
+                dbCntxt.SaveChanges();
+            }
+            catch 
+            {
+                Console.WriteLine("Något gick fel. Du skickas nu tillbaka till huvudmenyn.");
+            }
+                ReturnToMenu();
         }
         internal void ModifyStudent()
         {
@@ -84,7 +136,6 @@ namespace Uppg_databaser
         }
         internal void PrintAllStudent()
         {
-            //Lägg i en ifsats som kollar om listan är tom?
             if (dbCntxt != null)
             {
                 foreach (var s in dbCntxt)
