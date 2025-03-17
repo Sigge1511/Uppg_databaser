@@ -251,6 +251,7 @@ namespace Uppg_databaser
         {
             int studentchoice = 0;
             bool tryselect = false;
+            int loopnumber = 0;
 
             Console.Clear();
             //Skriv ut hela listan för att visa vad som finns i den
@@ -271,8 +272,19 @@ namespace Uppg_databaser
             {
                 Console.WriteLine("\nAnge id på personen du vill välja:");
                 tryselect = int.TryParse(Console.ReadLine(), out studentchoice);
+                if (tryselect == false) 
+                {
+                    Console.WriteLine("Något gick fel. Försök igen.");
+                    loopnumber++;
+                }
                 
-            } while (tryselect == false);
+            } while (tryselect == false && loopnumber <3);
+            if (loopnumber == 3) 
+            {
+                Console.Clear();
+                Console.WriteLine("Du har fått tre försök. Du skickas nu tillbaka till menyn");
+                ReturnToMenu();
+            }
             return studentchoice;
         }
         //*********************************************************************************************
