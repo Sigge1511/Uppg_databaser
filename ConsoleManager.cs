@@ -247,6 +247,7 @@ namespace Uppg_databaser
             }
             ReturnToMenu();
         }
+        //*******************HJÄLPMETODER*************************************************************
         internal int StudentSelector()
         {
             int studentchoice = 0;
@@ -272,14 +273,14 @@ namespace Uppg_databaser
             {
                 Console.WriteLine("\nAnge id på personen du vill välja:");
                 tryselect = int.TryParse(Console.ReadLine(), out studentchoice);
-                if (tryselect == false) 
+                if (tryselect == false)
                 {
                     Console.WriteLine("Något gick fel. Försök igen.");
                     loopnumber++;
                 }
-                
-            } while (tryselect == false && loopnumber <3);
-            if (loopnumber == 3) 
+
+            } while (tryselect == false && loopnumber < 3);
+            if (loopnumber == 3)
             {
                 Console.Clear();
                 Console.WriteLine("Du har fått tre försök. Du skickas nu tillbaka till menyn");
@@ -287,7 +288,6 @@ namespace Uppg_databaser
             }
             return studentchoice;
         }
-        //*********************************************************************************************
         internal void ReturnToMenu() 
         {
             Console.WriteLine("\nTryck enter för att återgå till menyn");
