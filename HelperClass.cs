@@ -8,14 +8,14 @@ namespace Uppg_databaser
 {
     internal class HelperClass
     {
-        internal StudentManager StManager = new StudentManager();
+        internal StudentManager stdmanager = new StudentManager();
         public StudentDbCntxt dbCntxt = new StudentDbCntxt();
         public void Run() 
         {
             PrintMenu();
             Console.ReadKey();
         }
-        //**************************************************************************************************
+        //**************MENYRELATERADE METODER*********************************************************
         internal void PrintMenu() 
         {
             Console.Clear();
@@ -74,11 +74,9 @@ namespace Uppg_databaser
                     break;
             }
         }
-        //**************************************************************************************************
-
+        //****************METODER FÖR MENYALTERNATIVEN*************************************************
         internal void AddStudent()
         {
-            var newstudent = new Student();
             bool loopselec = true;
             int loopnumber = 0;
             string fname;
@@ -121,13 +119,7 @@ namespace Uppg_databaser
                         bool trysave = int.TryParse(Console.ReadLine(), out savechoice);
                         if (savechoice == 1) 
                         {
-                            //Spara till newstudent
-                            //Lägg till i databas och spara ändringar
-                            newstudent.FirstName = fname;
-                            newstudent.LastName = lname;
-                            newstudent.City = city;
-                            dbCntxt.Add(newstudent);
-                            dbCntxt.SaveChanges();
+                            stdmanager.AddNewStudent(fname, lname, city);
                             loopselec = true;
                         }
                         else { loopselec = true; }
@@ -154,11 +146,9 @@ namespace Uppg_databaser
             try
             {
                 Student modstudent = dbCntxt.Students.Single(s => s.StudentId == stdntid);
-
                 Console.Clear();
                 Console.WriteLine("Vald student innan ändringen:");
                 Console.WriteLine($"{modstudent.FirstName} {modstudent.LastName}, {modstudent.City}\n");
-
                 do
                 {
                     //Ta emot lokala variabler
@@ -195,12 +185,7 @@ namespace Uppg_databaser
                         bool trysave = int.TryParse(Console.ReadLine(), out savechoice);
                         if (savechoice == 1)
                         {
-                            //Lägg till i databas och spara ändringar
-                            modstudent.FirstName = fname;
-                            modstudent.LastName = lname;
-                            modstudent.City = city;
-                            //dbCntxt.Add(newstudent); MODIFY
-                            dbCntxt.SaveChanges();
+                            stdmanager.EditStudent(stdntid, fname, lname, city);
                             loopselec = true;
                         }
                         else { loopselec = true; }
@@ -247,7 +232,7 @@ namespace Uppg_databaser
                     parsedelete = int.TryParse(Console.ReadLine(), out deletechoice);
                     if (deletechoice == 1)
                     {
-                        //Anropa deletemetod i manager
+                        stdmanager.DeleteStudent(stdntid);
                         Console.WriteLine("Post raderad");
                     }                    
                 } while (parsedelete == false);
@@ -258,8 +243,6 @@ namespace Uppg_databaser
             }
             ReturnToMenu();
         }
-
-        //*************Ha en metod för studentinfocollector???****************************
         internal int StudentSelector()
         {
             int studentchoice = 0;
@@ -288,10 +271,7 @@ namespace Uppg_databaser
             } while (tryselect == false);
             return studentchoice;
         }
-        //**************************************************************************************************
-
-        //Metod för att kolla valid id?
-
+        //*********************************************************************************************
         internal void ReturnToMenu() 
         {
             Console.WriteLine("\nTryck enter för att återgå till menyn");
