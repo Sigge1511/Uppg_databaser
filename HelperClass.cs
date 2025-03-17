@@ -234,7 +234,11 @@ namespace Uppg_databaser
                     {
                         stdmanager.DeleteStudent(stdntid);
                         Console.WriteLine("Post raderad");
-                    }                    
+                    }
+                    else 
+                    {
+                        ReturnToMenu();
+                    }
                 } while (parsedelete == false);
             }
             catch 
@@ -267,7 +271,7 @@ namespace Uppg_databaser
             {
                 Console.WriteLine("\nAnge id på personen du vill välja:");
                 tryselect = int.TryParse(Console.ReadLine(), out studentchoice);
-                Console.Clear();
+                
             } while (tryselect == false);
             return studentchoice;
         }
