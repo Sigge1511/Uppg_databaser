@@ -6,7 +6,7 @@ namespace Uppg_databaser
     {
         static void Main(string[] args)
         {
-            var helper = new HelperClass();
+            var helper = new ConsoleManager();
             helper.Run();                     
         }
         //Fixa en klass som är userinterface & en studentmodifier

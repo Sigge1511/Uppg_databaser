@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Uppg_databaser
 {
-    internal class HelperClass
+    internal class ConsoleManager
     {
         internal StudentManager stdmanager = new StudentManager();
         public StudentDbCntxt dbCntxt = new StudentDbCntxt();
