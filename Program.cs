@@ -9,5 +9,6 @@ namespace Uppg_databaser
             var helper = new HelperClass();
             helper.Run();                     
         }
+        //Fixa en klass som är userinterface & en studentmodifier
     }
 }

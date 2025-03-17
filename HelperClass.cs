@@ -8,6 +8,7 @@ namespace Uppg_databaser
 {
     internal class HelperClass
     {
+        internal StudentManager StManager = new StudentManager();
         public StudentDbCntxt dbCntxt = new StudentDbCntxt();
         public void Run() 
         {
@@ -235,8 +236,7 @@ namespace Uppg_databaser
             bool parsedelete = false;
             try
             {
-                Student delstudent = dbCntxt.Students.Single(s => s.StudentId == stdntid);
-                
+                Student delstudent = dbCntxt.Students.Single(s => s.StudentId == stdntid);                
 
                 Console.Clear();
                 Console.WriteLine("Vald student innan radering:");
@@ -247,9 +247,9 @@ namespace Uppg_databaser
                     parsedelete = int.TryParse(Console.ReadLine(), out deletechoice);
                     if (deletechoice == 1)
                     {
-                        dbCntxt.Students.Remove(delstudent);
+                        //Anropa deletemetod i manager
                         Console.WriteLine("Post raderad");
-                    }
+                    }                    
                 } while (parsedelete == false);
             }
             catch 
@@ -280,10 +280,11 @@ namespace Uppg_databaser
                 Console.WriteLine("Det finns inga studenter i databasen.");
                 ReturnToMenu();
             }
-            Console.WriteLine("\nAnge id på personen du vill ta bort:");
             do
             {
+                Console.WriteLine("\nAnge id på personen du vill välja:");
                 tryselect = int.TryParse(Console.ReadLine(), out studentchoice);
+                Console.Clear();
             } while (tryselect == false);
             return studentchoice;
         }
